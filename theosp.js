@@ -8,6 +8,33 @@
             return Object.prototype.toString.call(o) === '[object Array]';
         };
 
+    // based on jQuery's inArray
+    theosp.array.indexOf = function(elem, array) {
+        if ( array.indexOf ) {
+            return array.indexOf( elem );
+        }
+
+        for ( var i = 0, length = array.length; i < length; i++ ) {
+            if ( array[ i ] === elem ) {
+                return i;
+            }
+        }
+
+        return -1;
+    };
+
+    theosp.string = {};
+    theosp.string.supplant = function (string, o) { 
+        // based on Douglas Crockford's String.prototype.supplant
+        return string.replace(/\|([^|]*)\|/g, 
+            function (a, b) {  
+                var r = o[b];
+                return typeof r === 'string' || typeof r === "number" ? 
+                    r : a; 
+            }
+        ); 
+    };
+
     theosp.object = {};
     theosp.object.size = function (obj) {
         var size = 0, key;
