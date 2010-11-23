@@ -46,6 +46,15 @@
         return size;
     };
 
+    theosp.object.keys = Object.keys || function(o) {
+        var result = [];
+        for(var name in o) {
+            if (o.hasOwnProperty(name))
+                result.push(name);
+        }
+        return result;
+    };
+
     theosp.object.object = theosp.object.clone = function (o) {
         // Based on Douglas Crockford's object()
         function F() {}
