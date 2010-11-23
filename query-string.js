@@ -139,6 +139,39 @@ QueryString.stringify = QueryString.encode = function (obj, sep, eq, name) {
   }
 };
 
+/**
+ * The same as QueryString.stringify but uses theosp.object.deepKeys(obj) for
+ * objects
+ */
+QueryString.deepStringify = QueryString.deepEncode = function (obj, sep, eq, name) {
+  sep = sep || "&";
+  eq = eq || "=";
+  obj = (obj === null) ? undefined : obj;
+
+  switch (typeof obj) {
+    case "object":
+      return theosp.object.deepKeys(obj).map(function(k) {
+        if (theosp.array.isArray(obj[k])) {
+          return obj[k].map(function(v) {
+            return QueryString.escape(stringifyPrimitive(k)) +
+                   eq +
+                   QueryString.escape(stringifyPrimitive(v));
+          }).join(sep);
+        } else {
+          return QueryString.escape(stringifyPrimitive(k)) + 
+                 eq +
+                 QueryString.escape(stringifyPrimitive(obj[k]));
+        }
+      }).join(sep);
+
+    default:
+      return (name) ?
+        QueryString.escape(stringifyPrimitive(name)) + eq +
+          QueryString.escape(stringifyPrimitive(obj)) :
+        "";
+  }
+};
+
 // Parse a key=val string.
 QueryString.parse = QueryString.decode = function (qs, sep, eq) {
   sep = sep || "&";

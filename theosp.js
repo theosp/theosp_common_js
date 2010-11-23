@@ -55,6 +55,14 @@
         return result;
     };
 
+    theosp.object.deepKeys = Object.keys || function(o) {
+        var result = [];
+        for(var name in o) {
+            result.push(name);
+        }
+        return result;
+    };
+
     theosp.object.object = theosp.object.clone = function (o) {
         // Based on Douglas Crockford's object()
         function F() {}
