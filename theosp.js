@@ -46,7 +46,7 @@
         return size;
     };
 
-    theosp.object.object = theosp.object.clone = function () {
+    theosp.object.object = theosp.object.clone = function (o) {
         // Based on Douglas Crockford's object()
         function F() {}
         F.prototype = o;
