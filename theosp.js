@@ -46,6 +46,13 @@
         return size;
     };
 
+    theosp.object.object = theosp.object.clone = function () {
+        // Based on Douglas Crockford's object()
+        function F() {}
+        F.prototype = o;
+        return new F();
+    };
+
     // was taken from jQuery
     theosp.object.extend = function () {
         // copy reference to target object
