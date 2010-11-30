@@ -35,6 +35,14 @@
         ); 
     };
 
+    theosp.string.ucfirst = function (str) { 
+        // based on http://phpjs.org/functions/ucfirst
+
+        str += '';
+        var f = str.charAt(0).toUpperCase();
+        return f + str.substr(1);
+    };
+
     theosp.object = {};
     theosp.object.size = function (obj) {
         var size = 0, key;
