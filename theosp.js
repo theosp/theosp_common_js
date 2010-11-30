@@ -23,6 +23,35 @@
         return -1;
     };
 
+    theosp.array.map = null;
+    if (Array.prototype.map) {
+        theosp.array.map = function (array, fun, thisp) {
+            return Array.prototype.map.call(array, fun, thisp);
+        };
+    } else {
+        theosp.array.map = function (array, fun /*, thisp */) {
+            // based on
+            // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/map
+            if (array === void 0 || array === null)
+                throw new TypeError();
+
+            var t = Object(array);
+            var len = t.length >>> 0;
+            if (typeof fun !== "function")
+                throw new TypeError();
+
+            var res = new Array(len);
+            var thisp = arguments[2];
+            for (var i = 0; i < len; i++)
+            {
+                if (i in t)
+                    res[i] = fun.call(thisp, t[i], i, t);
+            }
+
+            return res;
+        }
+    };
+
     theosp.string = {};
     theosp.string.supplant = function (string, o) { 
         // based on Douglas Crockford's String.prototype.supplant

@@ -117,7 +117,7 @@ QueryString.stringify = QueryString.encode = function (obj, sep, eq, name) {
 
   switch (typeof obj) {
     case "object":
-      return theosp.object.keys(obj).map(function(k) {
+      return theosp.array.map(theosp.object.keys(obj), function(k) {
         if (theosp.array.isArray(obj[k])) {
           return obj[k].map(function(v) {
             return QueryString.escape(stringifyPrimitive(k)) +
