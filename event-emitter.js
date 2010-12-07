@@ -7,6 +7,7 @@ RERUIRES: Daniel Chcouri's theosp_common_js (theosp.js)
 EventEmitter = function () {};
 
 var isArray = theosp.array.isArray;
+var indexOf = theosp.array.indexOf;
 
 EventEmitter.prototype.emit = function (type) {
   // If there is no 'error' event listener then throw.
@@ -103,7 +104,7 @@ EventEmitter.prototype.removeListener = function (type, listener) {
   var list = this._events[type];
 
   if (isArray(list)) {
-    var i = list.indexOf(listener);
+    var i = indexOf(list, listener);
     if (i < 0) return this;
     list.splice(i, 1);
     if (list.length == 0)
