@@ -104,7 +104,8 @@ EventEmitter.prototype.removeListener = function (type, listener) {
   var list = this._events[type];
 
   if (isArray(list)) {
-    var i = indexOf(list, listener);
+    var i = indexOf(listener, list);
+
     if (i < 0) return this;
     list.splice(i, 1);
     if (list.length == 0)
