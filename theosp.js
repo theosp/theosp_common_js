@@ -18,6 +18,14 @@
             if (array[i] === elem) {
                 return i;
             }
+
+            // TODO: this isn't the best solution, but I don't have time to
+            // investigate it
+            if (typeof elem === "function") {
+                if (array[i].toString() == elem.toString()) {
+                    return i;
+                }
+            }
         }
 
         return -1;
