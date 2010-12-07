@@ -99,6 +99,16 @@ RERUIRES: Node.js's EventEmitter
         self.emit.apply(this, args_for_after_unset_mode);
     };
 
+    $.ModesManager.prototype.toggleMode = function (mode) {
+        var self = this;
+
+        if (self.hasMode(mode)) {
+            self.unsetMode(mode);
+        } else {
+            self.setMode(mode);
+        }
+    };
+
     $.ModesManager.prototype.hasMode = function (mode) {
         var self = this;
 
