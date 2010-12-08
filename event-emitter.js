@@ -85,14 +85,15 @@ EventEmitter.prototype.on = EventEmitter.prototype.addListener;
 
 EventEmitter.prototype.once = function (type, listener) {
   var self = this;
-  self.on(type, function g () {
+
+  var g = function () {
     self.removeListener(type, g);
     listener.apply(this, arguments);
-  });
+  };
+  self.on(type, g);
 
   return this;
 };
-
 EventEmitter.prototype.removeListener = function (type, listener) {
   if ('function' !== typeof listener) {
     throw new Error('removeListener only takes instances of Function');
