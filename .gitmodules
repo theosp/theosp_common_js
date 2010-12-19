@@ -1,0 +1,3 @@
+[submodule "build"]
+	path = build
+	url = git@github.com:theosp/theosp_common_build_tools.git
