@@ -6,7 +6,7 @@ CLOSURE_COMPILER = ${BUILD_DIR}/google-compiler-20100918.jar
 
 MINJAR ?= java -jar ${CLOSURE_COMPILER}
 
-all: event-emitter.min.js modes_manager.min.js query-string.min.js theosp.min.js json2.min.js
+all: event-emitter.min.js modes_manager.min.js query-string.min.js theosp.min.js json2.min.js base64.min.js
 	@@echo "theosp commonjs build complete."
 
 event-emitter.min.js: event-emitter.js
@@ -23,6 +23,9 @@ theosp.min.js: theosp.js
 
 json2.min.js: json2.js
 	@@${MINJAR} --js json2.js --warning_level QUIET --js_output_file json2.min.js
+
+base64.min.js: base64.js
+	@@${MINJAR} --js base64.js --warning_level QUIET --js_output_file base64.min.js
 
 clean : 
 	@@rm event-emitter.min.js
