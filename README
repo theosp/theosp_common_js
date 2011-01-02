@@ -1,0 +1,16 @@
+Guidelines
+==========
+
+Names
+-----
+
+ * Constructors: upper camel case.
+ * functions: lower camel case.
+ * other types: underscored.
+
+Spacing
+-------
+
+Indent the code with 4 spaces.
+
+
