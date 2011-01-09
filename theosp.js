@@ -88,7 +88,7 @@
             func.apply(this, [i, o[i]]);      
             if (typeof o[i] === "object") {
                 //going on step down in the object tree!!
-                traverse(o[i], func);
+                this.traverse(o[i], func);
             }
         }
     };
