@@ -123,8 +123,18 @@ RERUIRES: Node.js's EventEmitter
     $.ModesManager.prototype.addModesElement = function () {
         var self = this;
 
+        var element;
         for (var i = 0; i < arguments.length; i++) {
-            self.modes_elements.push(arguments[i]);
+            element = arguments[i];
+
+            // add the current modes classes
+            for (var mode in self.modes) {
+                if (self.modes.hasOwnProperty(mode)) {
+                    element.addClass(self.modes_classes_template(mode));
+                }
+            }
+
+            self.modes_elements.push(element);
         }
     };
 })(jQuery);
