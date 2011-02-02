@@ -44,7 +44,6 @@ RERUIRES: Node.js's EventEmitter
         if (self.hasMode(mode)) {
             return;
         }
-
         self.modes[mode] = true;
 
         var args_for_events = Array.prototype.slice.call(arguments, 1),
@@ -56,12 +55,13 @@ RERUIRES: Node.js's EventEmitter
 
         // call 'before_set_mode_' + mode event
         self.emit.apply(this, args_for_before_set_mode);
-        for (var jQueryObj in self.modes_elements) {
-            if (self.modes_elements.hasOwnProperty(jQueryObj)) {
-                self.modes_elements[jQueryObj]
-                    .addClass(self.modes_classes_template(mode));
-            }
+        var mode_element;
+        for (var i = 0; i < self.modes_elements.length; i++) {
+            mode_element = self.modes_elements[i];
+
+            mode_element.addClass(self.modes_classes_template(mode));
         }
+
         // call 'after_set_mode_' + mode event
         self.emit.apply(this, args_for_after_set_mode);
     };
@@ -89,12 +89,13 @@ RERUIRES: Node.js's EventEmitter
 
         // call 'before_unset_mode_' + mode event
         self.emit.apply(this, args_for_before_unset_mode);
-        for (var jQueryObj in self.modes_elements) {
-            if (self.modes_elements.hasOwnProperty(jQueryObj)) {
-                self.modes_elements[jQueryObj]
-                    .removeClass(self.modes_classes_template(mode));
-            }
+        var mode_element;
+        for (var i = 0; i < self.modes_elements.length; i++) {
+            mode_element = self.modes_elements[i];
+
+            mode_element.removeClass(self.modes_classes_template(mode));
         }
+
         // call 'after_unset_mode_' + mode event
         self.emit.apply(this, args_for_after_unset_mode);
     };
