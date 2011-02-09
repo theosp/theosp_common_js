@@ -52,6 +52,20 @@
         }
     };
 
+    // original:
+    // http://stackoverflow.com/questions/281264/remove-empty-elements-from-an-array-in-javascript
+    theosp.array.clean = function (actual) {
+        var newArray = new Array();
+
+        for (var i = 0; i < actual.length; i++) {
+            if (actual[i]){
+                newArray.push(actual[i]);
+            }
+        }
+
+        return newArray;
+    };
+
     theosp.string = {};
     theosp.string.supplant = function (string, o) { 
         // based on Douglas Crockford's String.prototype.supplant
