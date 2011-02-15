@@ -195,6 +195,27 @@
     };
     // }}}
     
+    // functions {{{
+    theosp.functions = {};
+
+    // original:
+    // http://stackoverflow.com/questions/447658/can-i-copy-clone-a-function-in-javascript
+    theosp.functions.clone = function (fct) {
+        var clone = function() {
+            return fct.apply(this, arguments);
+        };
+
+        clone.prototype = theosp.object.clone(fct.prototype);
+
+        for (property in fct) {
+            if (fct.hasOwnProperty(property) && property !== 'prototype') {
+                clone[property] = fct[property];
+            }
+        }
+        return clone;
+    };
+    // }}}
+
     // objects generators {{{
     // theosp.gen holds functions that generates objects
     theosp.gen = {};
