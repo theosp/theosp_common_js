@@ -1,6 +1,7 @@
 (function () {
     var theosp = {};
 
+    // arrays {{{
     theosp.array = {};
     theosp.array.isArray = 
         Array.isArray || // Part of ECMAScript5
@@ -65,7 +66,9 @@
 
         return newArray;
     };
-
+    // }}}
+    
+    // strings {{{
     theosp.string = {};
     theosp.string.supplant = function (string, o) { 
         // based on Douglas Crockford's String.prototype.supplant
@@ -85,7 +88,9 @@
         var f = str.charAt(0).toUpperCase();
         return f + str.substr(1);
     };
-
+    // }}}
+    
+    // object {{{
     theosp.object = {};
     theosp.object.size = function (obj) {
         var size = 0, key;
@@ -188,7 +193,9 @@
         // Return the modified object
         return target;
     };
-
+    // }}}
+    
+    // objects generators {{{
     // theosp.gen holds functions that generates objects
     theosp.gen = {};
     // In the scripts I write an error object is an object that has the error
@@ -207,6 +214,7 @@
 
         return o;
     };
+    // }}}
 
     // If this script has been loaded using CommonJS's require, we assing the
     // variables we set theosp object to the module's exports property.
@@ -218,3 +226,5 @@
         this.theosp = theosp;
     }
 })();
+
+// vim:fdm=marker:fmr={{{,}}}:
