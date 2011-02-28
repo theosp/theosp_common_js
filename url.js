@@ -107,6 +107,49 @@ RERUIRES: Node.js's QueryString
       return out;
     }
 
+    // format a parsed object into a url string
+    function urlFormat(obj) {
+      // ensure it's an object, and not a string url.
+      // If it's an obj, this is a no-op.
+      // this way, you can call url_format() on strings
+      // to clean up potentially wonky urls.
+      if (typeof(obj) === 'string') obj = urlParse(obj);
+
+      var protocol = obj.protocol || '',
+          host = (obj.host !== undefined) ? obj.host :
+              obj.hostname !== undefined ? (
+                  (obj.auth ? obj.auth + '@' : '') +
+                  obj.hostname +
+                  (obj.port ? ':' + obj.port : '')
+              ) :
+              false,
+          pathname = obj.pathname || '',
+          search = obj.search || (
+              obj.query && ('?' + (
+                  typeof(obj.query) === 'object' ?
+                  querystring.stringify(obj.query) :
+                  String(obj.query)
+              ))
+          ) || '',
+          hash = obj.hash || '';
+
+      if (protocol && protocol.substr(-1) !== ':') protocol += ':';
+
+      // only the slashedProtocols get the //.  Not mailto:, xmpp:, etc.
+      // unless they had them to begin with.
+      if (obj.slashes ||
+          (!protocol || slashedProtocol[protocol]) && host !== false) {
+        host = '//' + (host || '');
+        if (pathname && pathname.charAt(0) !== '/') pathname = '/' + pathname;
+      } else if (!host) {
+        host = '';
+      }
+
+      if (hash && hash.charAt(0) !== '#') hash = '#' + hash;
+      if (search && search.charAt(0) !== '?') search = '?' + search;
+
+      return protocol + host + pathname + search + hash;
+    }
 
     function parseHost(host) {
       var out = {};
@@ -128,6 +171,7 @@ RERUIRES: Node.js's QueryString
     // Assign functions to the global scope's NODE_URL var (which `this`
     // points to since we call the function without the new operator).
     this.NODE_URL = {
-        parse: urlParse
+        parse: urlParse,
+        format: urlFormat
     };
 })();
