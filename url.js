@@ -8,9 +8,30 @@ RERUIRES: Node.js's QueryString
 (function () {
     var protocolPattern = /^([a-z0-9]+:)/,
         portPattern = /:[0-9]+$/,
-        nonHostChars = ['/', '?', ';', '#'],
+        delims = ['<', '>', '"', '\'', '`', /\s/],
+        unwise = ['{', '}', '|', '\\', '^', '~', '[', ']', '`'].concat(delims),
+        nonHostChars = ['/', '?', ';', '#'].concat(unwise),
+        hostnameMaxLen = 255,
+        hostnamePartPattern = /^[a-z0-9][a-z0-9A-Z-]{0,62}$/,
+        unsafeProtocol = {
+          'javascript': true,
+          'javascript:': true
+        },
         hostlessProtocol = {
+          'javascript': true,
+          'javascript:': true,
           'file': true,
+          'file:': true
+        },
+        pathedProtocol = {
+          'http': true,
+          'https': true,
+          'ftp': true,
+          'gopher': true,
+          'file': true,
+          'http:': true,
+          'ftp:': true,
+          'gopher:': true,
           'file:': true
         },
         slashedProtocol = {
@@ -29,17 +50,17 @@ RERUIRES: Node.js's QueryString
 
     function urlParse(url, parseQueryString, slashesDenoteHost) {
       if (url && typeof(url) === 'object' && url.href) return url;
-
-      var out = { href: url },
+    
+      var out = {},
           rest = url;
-
+    
       var proto = protocolPattern.exec(rest);
       if (proto) {
         proto = proto[0];
         out.protocol = proto;
         rest = rest.substr(proto.length);
       }
-
+    
       // figure out if it's got a host
       // user@server is *always* interpreted as a hostname, and url
       // resolution will treat //foo/bar as host=foo,path=bar because that's
@@ -51,6 +72,7 @@ RERUIRES: Node.js's QueryString
           out.slashes = true;
         }
       }
+    
       if (!hostlessProtocol[proto] &&
           (slashes || (proto && !slashedProtocol[proto]))) {
         // there's a hostname.
@@ -69,7 +91,7 @@ RERUIRES: Node.js's QueryString
           out.host = rest;
           rest = '';
         }
-
+    
         // pull out the auth and port.
         var p = parseHost(out.host);
         var keys = theosp.object.keys(p);
@@ -80,9 +102,36 @@ RERUIRES: Node.js's QueryString
         // we've indicated that there is a hostname,
         // so even if it's empty, it has to be present.
         out.hostname = out.hostname || '';
+    
+        // validate a little.
+        if (out.hostname.length > hostnameMaxLen) {
+          out.hostname = '';
+        } else {
+          var hostparts = out.hostname.split(/\./);
+          for (var i = 0, l = hostparts.length; i < l; i++) {
+            var part = hostparts[i];
+            if (!part.match(hostnamePartPattern)) {
+              out.hostname = '';
+              break;
+            }
+          }
+        }
       }
-
+    
       // now rest is set to the post-host stuff.
+      // chop off any delim chars.
+      if (!unsafeProtocol[proto]) {
+        var chop = rest.length;
+        for (var i = 0, l = delims.length; i < l; i++) {
+          var c = rest.indexOf(delims[i]);
+          if (c !== -1) {
+            chop = Math.min(c, chop);
+          }
+        }
+        rest = rest.substr(0, chop);
+      }
+    
+    
       // chop off from the tail first.
       var hash = rest.indexOf('#');
       if (hash !== -1) {
@@ -100,10 +149,18 @@ RERUIRES: Node.js's QueryString
         rest = rest.slice(0, qm);
       } else if (parseQueryString) {
         // no query string, but parseQueryString still requested
+        out.search = '';
         out.query = {};
       }
       if (rest) out.pathname = rest;
-
+      if (slashedProtocol[proto] &&
+          out.hostname && !out.pathname) {
+        out.pathname = '/';
+      }
+    
+      // finally, reconstruct the href based on what has been validated.
+      out.href = urlFormat(out);
+    
       return out;
     }
 
