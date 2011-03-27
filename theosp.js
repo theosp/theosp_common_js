@@ -88,6 +88,19 @@
         var f = str.charAt(0).toUpperCase();
         return f + str.substr(1);
     };
+
+    // http://www.somacon.com/p355.php
+    theosp.string.trim = function(str) {
+        return str.replace(/^\s+|\s+$/g,"");
+    };
+
+    theosp.string.ltrim = function(str) {
+        return str.replace(/^\s+/,"");
+    };
+
+    theosp.string.rtrim = function(str) {
+        return str.replace(/\s+$/,"");
+    };
     // }}}
     
     // object {{{
