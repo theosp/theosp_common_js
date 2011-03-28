@@ -32,7 +32,7 @@ RERUIRES: Daniel Chcouri's theosp_common_js (theosp.js)
                 '<div id="debug_box_container">' +
                     '<div id="debug_box_header">' +
                         '<b style="color: red;">Debug Messages:</b><br />' +
-                        '<span style="color: yellow">Debug Level: [' + debug.join(', ') + ']</span>' +
+                        '<span style="color: yellow">Debug Level: [' + debug_level.join(', ') + ']</span>' +
                     '</div>' +
                     '<div id="debug_box_content">' +
                     '</div>' +
@@ -46,22 +46,22 @@ RERUIRES: Daniel Chcouri's theosp_common_js (theosp.js)
     theosp.debug.isCurrectDebugLevel = function (levels) {
         var levels_in_debug = false;
 
-        if (typeof debug !== 'undefined' && theosp.array.isArray(debug)) {
+        if (typeof debug_mode !== 'undefined' && debug_mode === true) {
             if (theosp.array.isArray(levels)) {
                 for (var i = 0; i < levels.length; i++) {
                     var level = levels[i];
                 
-                    if (theosp.array.indexOf(level, debug) !== -1) {
+                    if (theosp.array.indexOf(level, debug_level) !== -1) {
                         levels_in_debug = true;
                     }
                 }
             } else {
-                if (theosp.array.indexOf(levels, debug) !== -1) {
+                if (theosp.array.indexOf(levels, debug_level) !== -1) {
                     levels_in_debug = true;
                 }
             }
 
-            if (levels_in_debug === true || debug.length === 0) {
+            if (levels_in_debug === true || debug_level.length === 0) {
                 return true;
             }
         }
@@ -75,7 +75,10 @@ RERUIRES: Daniel Chcouri's theosp_common_js (theosp.js)
         if (theosp.debug.isCurrectDebugLevel(levels) === true) {
             theosp.debug.initDebugBox();
 
-            $("#debug_box_content").prepend(message + "<br /><br />");
+            $("#debug_box_content").prepend(
+                '<span style="color: yellow;">' + JSON.stringify(levels) + "</span>:<br />" +
+                message + "<br /><br />"
+            );
         }
     };
     // }}}
