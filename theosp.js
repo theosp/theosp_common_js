@@ -101,6 +101,26 @@
     theosp.string.rtrim = function(str) {
         return str.replace(/\s+$/,"");
     };
+
+    theosp.string.split = function(str, options) {
+        if (typeof options === 'undefined') {
+            options = {};
+        }
+
+        options = $.extend({trim_items: true, remove_empty_items: true, seperator: ","}, options);
+
+        var splitted = str.split(options.seperator);
+
+        if (options.trim_items === true) {
+            splitted = theosp.array.map(splitted, theosp.string.trim);
+        }
+
+        if (options.remove_empty_items === true) {
+            splitted = theosp.array.clean(splitted);
+        }
+
+        return splitted;
+    };
     // }}}
     
     // object {{{
