@@ -53,6 +53,41 @@
         }
     };
 
+    theosp.array.filter = null;
+    if (Array.prototype.filter) {
+        theosp.array.filter = function (array, fun, thisp) {
+            return Array.prototype.filter.call(array, fun, thisp);
+        };
+    } else {
+        theosp.array.filter = function (array, fun /*, thisp */) {
+            // based on
+            // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/filter
+            "use strict";
+
+            if (array === void 0 || array === null)
+              throw new TypeError();
+
+            var t = Object(array);
+            var len = t.length >>> 0;
+            if (typeof fun !== "function")
+              throw new TypeError();
+
+            var res = [];
+            var thisp = arguments[1];
+            for (var i = 0; i < len; i++)
+            {
+              if (i in t)
+              {
+                var val = t[i]; // in case fun mutates this
+                if (fun.call(thisp, val, i, t))
+                  res.push(val);
+              }
+            }
+
+            return res;
+          };
+    };
+
     // original:
     // http://stackoverflow.com/questions/281264/remove-empty-elements-from-an-array-in-javascript
     theosp.array.clean = function (actual) {
