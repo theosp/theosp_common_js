@@ -1,5 +1,6 @@
 /*
 RERUIRES: Daniel Chcouri's theosp_common_js (theosp.js)
+          Steven Levithan date.format.js
 */
 
 (function () {
@@ -76,7 +77,7 @@ RERUIRES: Daniel Chcouri's theosp_common_js (theosp.js)
             theosp.debug.initDebugBox();
 
             $("#debug_box_content").prepend(
-                '<span style="color: yellow;">' + JSON.stringify(levels) + "</span>:<br />" +
+                '<span style="color: yellow;">' + (new Date()).format("h:MM:ss.l") + " :: " + JSON.stringify(levels) + "</span>:<br />" +
                 message + "<br /><br />"
             );
         }
