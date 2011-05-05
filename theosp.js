@@ -124,6 +124,12 @@
         return f + str.substr(1);
     };
 
+    theosp.string.camelCaseToUnderScores = function (str) { 
+        return str.replace(/([A-Z])/g, function (a) {
+            return "_" + a.toLowerCase();
+        }).substr(1);
+    };
+
     // http://www.somacon.com/p355.php
     theosp.string.trim = function(str) {
         return str.replace(/^\s+|\s+$/g,"");
