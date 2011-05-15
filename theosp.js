@@ -124,6 +124,20 @@
         return f + str.substr(1);
     };
 
+    // space seperated to camel cased
+    theosp.string.readableToCamelCased = function (str) { 
+        return theosp.string.ucfirst(str.toLowerCase().replace(/\s+(.)/g, function (match, a) {
+            return a.toUpperCase();
+        }));
+    };
+
+    // space seperated to 
+    theosp.string.readableToUnderscored = function (str) { 
+        return str.toLowerCase().replace(/\s+(.)/g, function (match, a) {
+            return "_" + a;
+        });
+    };
+
     theosp.string.camelCaseToUnderScores = function (str) { 
         return str.replace(/([A-Z])/g, function (a) {
             return "_" + a.toLowerCase();
