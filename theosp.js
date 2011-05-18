@@ -157,6 +157,10 @@
         return str.replace(/\s+$/,"");
     };
 
+    theosp.string.tagify = function (str) { 
+        return theosp.string.trim(str).toLowerCase().replace(/\s+/g, '-');
+    };
+
     theosp.string.split = function(str, options) {
         if (typeof options === 'undefined') {
             options = {};
