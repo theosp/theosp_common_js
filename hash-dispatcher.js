@@ -12,15 +12,22 @@
  *         regex: /re/g,
  *         action: function () {}
  *     },
- *     /regex2/: function () {
- *         regex: /re/g,
+ *     {
+ *         regex: /re2/g,
  *         action: function () {}
+ *     },
+ *     {
+ *         action: function () {
+ *             // default route
+ *         }
  *     }
  * ]
  *
  * The .dispatch(url) method looks for the first object in routes whose regex
  * property matches the url and calls the function in its action property
  *
+ * Routes without route.regex are default (we will always stop on them and run
+ * their action)
 */
 
 (function () {
@@ -81,9 +88,16 @@
             for (var i = 0; i < self.routes.length; i++) {
                 var route = self.routes[i];
 
-                // avoid bugs in cases where the regex ends with /g
-                route.regex.lastIndex = 0;
-                if (route.regex.test(hash) === true) {
+                if (typeof route.regex !== 'undefined') {
+                    // avoid bugs in cases where the regex ends with /g
+                    route.regex.lastIndex = 0;
+                    if ((route_params = route.regex.exec(hash)) !== null) {
+                        route.action.apply(this, route_params);
+
+                        return;
+                    }
+                } else {
+                    // We look on routes without route.regex as defaults
                     route.action(hash);
 
                     return;
