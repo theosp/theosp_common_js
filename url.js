@@ -2,7 +2,6 @@
 Node.js's Url
 
 RERUIRES: Node.js's QueryString
-              Node.js's Buffer
           Daniel Chcouri's theosp_common_js (theosp.js)
 */
 (function () {
