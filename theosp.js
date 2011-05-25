@@ -116,6 +116,14 @@
         ); 
     };
 
+    theosp.string.lcfirst = function (str) { 
+        // based on http://phpjs.org/functions/ucfirst
+
+        str += '';
+        var f = str.charAt(0).toLowerCase();
+        return f + str.substr(1);
+    };
+
     theosp.string.ucfirst = function (str) { 
         // based on http://phpjs.org/functions/ucfirst
 
