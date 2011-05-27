@@ -146,7 +146,7 @@
         });
     };
 
-    theosp.string.camelCaseToUnderScores = function (str) { 
+    theosp.string.camelCaseToUnderScored = function (str) { 
         return str.replace(/([A-Z])/g, function (a) {
             return "_" + a.toLowerCase();
         }).substr(1);
