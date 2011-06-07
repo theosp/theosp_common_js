@@ -178,6 +178,14 @@
             },
             // }}}
 
+            // underScoredToCamelCase {{{
+            underScoredToCamelCase: function (str) { 
+                return theosp.string.ucfirst(str.replace(/_(.)/g, function (match, a) {
+                    return a.toUpperCase();
+                }));
+            },
+            // }}}
+
             // trim {{{
             trim: function(str) {
                 // http://www.somacon.com/p355.php
