@@ -127,8 +127,13 @@
                 return string.replace(/\|([^|]*)\|/g, 
                     function (a, b) {  
                         var r = o[b];
-                        return typeof r === 'string' || typeof r === "number" ? 
-                            r : a; 
+                        if (typeof r === 'string' || typeof r === "number") {
+                            return r;
+                        } else if (r === null) {
+                            return "";
+                        } else {
+                            return a;
+                        }
                     }
                 ); 
             },
