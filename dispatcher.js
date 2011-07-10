@@ -86,7 +86,7 @@ if ((typeof $ === "undefined" || typeof $.extend === "undefined") && typeof requ
     // methods {{{
     $.extend(Dispatcher.prototype, {
         // dispatch {{{
-        dispatch: function (string) {
+        dispatch: function (string, context) {
             var self = this;
 
             if (typeof string === 'undefined') {
@@ -97,6 +97,10 @@ if ((typeof $ === "undefined" || typeof $.extend === "undefined") && typeof requ
                 }
             }
 
+            if (typeof context === 'undefined') {
+                context = {};
+            }
+
             for (var i = 0; i < self.routes.length; i++) {
                 var route = self.routes[i];
 
@@ -104,13 +108,13 @@ if ((typeof $ === "undefined" || typeof $.extend === "undefined") && typeof requ
                     // avoid bugs in cases where the regex ends with /g
                     route.regex.lastIndex = 0;
                     if ((route_params = route.regex.exec(string)) !== null) {
-                        route.action.apply(this, route_params);
+                        route.action.apply(context, route_params);
 
                         return;
                     }
                 } else {
                     // We look on routes without route.regex as defaults
-                    route.action(string);
+                    route.action.call(context, string);
 
                     return;
                 }
