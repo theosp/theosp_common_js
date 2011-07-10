@@ -30,6 +30,20 @@
  * their action)
 */
 
+// if running under commonjs (nodejs) {{{
+if ((typeof $ === "undefined" || typeof $.extend === "undefined") && typeof require === "function") {
+    require.paths.unshift('.');
+    EventEmitter = require('events').EventEmitter;
+    theosp = require("./theosp");
+
+    if (typeof $ === 'undefined') {
+        $ = {};
+    }
+
+    $.extend = theosp.object.extend;
+}
+// }}}
+
 (function () {
     // HashDispatcher {{{
 
@@ -52,17 +66,21 @@
         self.routes = routes;
         // }}}
 
-        // bind to the hashchange event {{{
-        $(window).bind('hashchange', function() {
-            self.dispatch();
-        });
+        // If running under a browser bind to the hashchange event {{{
+        if (typeof window !== 'undefined') {
+            $(window).bind('hashchange', function() {
+                self.dispatch();
+            });
 
-        $(window).ready(function () {
-            $(window).trigger('hashchange');
-        });
+            $(window).ready(function () {
+                $(window).trigger('hashchange');
+            });
+        }
         // }}}
     };
+    // }}}
 
+    // Prototypical Chain {{{
     HashDispatcher.prototype = new EventEmitter();
     HashDispatcher.prototype.constructor = HashDispatcher;
     // }}}
@@ -81,8 +99,14 @@
         dispatch: function (hash) {
             var self = this;
 
+            // If running under a browser use the current hash as default
+            // otherwise use "#" {{{
             if (typeof hash === 'undefined') {
-                hash = window.location.hash;
+                if (typeof window !== 'undefined') {
+                    hash = window.location.hash;
+                } else {
+                    hash = "#";
+                }
             }
 
             for (var i = 0; i < self.routes.length; i++) {
@@ -111,9 +135,17 @@
 
     // }}}
 
-    // Assign functions to the global scope's HashDispatcher var (which `this`
-    // points to since we call the function without the new operator).
-    this.HashDispatcher = HashDispatcher;
+    // export {{{
+    if (typeof module === 'object' && typeof module.exports === 'object') {
+        // If imported using common js (nodejs)
+        exports.HashDispatcher = HashDispatcher;
+    } else {
+        // Otherwise simply attach to the global object
+        this.HashDispatcher = HashDispatcher;
+    }
+    // }}}
+
+    // }}}
 })();
 
 // vim:fdm=marker:fmr={{{,}}}:
