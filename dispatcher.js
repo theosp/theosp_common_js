@@ -114,7 +114,7 @@ if ((typeof $ === "undefined" || typeof $.extend === "undefined") && typeof requ
                     }
                 } else {
                     // We look on routes without route.regex as defaults
-                    route.action(string);
+                    route.action.call(context, string);
 
                     return;
                 }
