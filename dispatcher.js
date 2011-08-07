@@ -77,7 +77,9 @@ if ((typeof $ === "undefined" || typeof $.extend === "undefined") && typeof requ
     $.extend(Dispatcher.prototype, {
         // options {{{
         options: { 
-            default_dispatcher_input: ""
+            default_dispatcher_input: "",
+            pre_filter: null,
+            post_filter: null
         }
         // }}}
     });
@@ -108,7 +110,15 @@ if ((typeof $ === "undefined" || typeof $.extend === "undefined") && typeof requ
                     // avoid bugs in cases where the regex ends with /g
                     route.regex.lastIndex = 0;
                     if ((route_params = route.regex.exec(string)) !== null) {
+                        context.route_params = route_params;
+
+                        if (typeof self.options.pre_filter === "function") {
+                            self.options.pre_filter.call(context);
+                        }
                         route.action.apply(context, route_params);
+                        if (typeof self.options.post_filter === "function") {
+                            self.options.post_filter.call(context);
+                        }
 
                         return;
                     }
