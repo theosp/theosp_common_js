@@ -91,6 +91,10 @@ if ((typeof $ === "undefined" || typeof $.extend === "undefined") && typeof requ
         dispatch: function (string, context) {
             var self = this;
 
+            if (typeof context === 'undefined') {
+                context = {};
+            }
+
             if (typeof string === 'undefined') {
                 if (typeof self.options.default_dispatcher_input === "function") {
                     string = self.options.default_dispatcher_input();
@@ -99,9 +103,18 @@ if ((typeof $ === "undefined" || typeof $.extend === "undefined") && typeof requ
                 }
             }
 
-            if (typeof context === 'undefined') {
-                context = {};
+            // if has query string, seperate it from the path string {{{
+            query_string_portion = /(.*)?\?(.*)/.exec(string);
+            if (query_string_portion !== null) {
+                string = query_string_portion[1];
+                get_params_string = query_string_portion[2];
+
+                context.query_string = NODE_QUERY_STRING.parse(get_params_string);
+            } else {
+                context.query_string = {};
             }
+            context.path = string;
+            // }}}
 
             for (var i = 0; i < self.routes.length; i++) {
                 var route = self.routes[i];
@@ -124,6 +137,8 @@ if ((typeof $ === "undefined" || typeof $.extend === "undefined") && typeof requ
                     }
                 } else {
                     // We look on routes without route.regex as defaults
+                    context.route_params = {};
+
                     route.action.call(context, string);
 
                     return;
