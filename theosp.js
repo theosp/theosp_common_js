@@ -235,9 +235,20 @@
                 }
 
                 return splitted;
-            }
+            },
             // }}}
 
+            // parseDjangoJsonDate {{{
+            parseDjangoJsonDate: function (date_string) {
+                if (typeof date_string !== "string") {
+                    return date_string;
+                }
+
+                args = date_string.replace('**new Date(', '').replace(')', '').split(',');
+
+                return new Date(args[0], args[1], args[2], args[3] || 0, args[4] || 0, args[5] || 0);
+            }
+            // }}}
         },
         // }}}
 
