@@ -34,6 +34,7 @@
 if ((typeof $ === "undefined" || typeof $.extend === "undefined") && typeof require === "function") {
     require.paths.unshift('.');
     EventEmitter = require('events').EventEmitter;
+    NODE_QUERY_STRING = require('querystring');
     theosp = require("./theosp");
 
     if (typeof $ === 'undefined') {
