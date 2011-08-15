@@ -33,6 +33,7 @@
 // if running under commonjs (nodejs) {{{
 if ((typeof $ === "undefined" || typeof $.extend === "undefined") && typeof require === "function") {
     EventEmitter = require('events').EventEmitter;
+    NODE_QUERY_STRING = require('querystring');
     theosp = require("./theosp");
 
     if (typeof $ === 'undefined') {
