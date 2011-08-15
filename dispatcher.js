@@ -32,7 +32,6 @@
 
 // if running under commonjs (nodejs) {{{
 if ((typeof $ === "undefined" || typeof $.extend === "undefined") && typeof require === "function") {
-    require.paths.unshift('.');
     EventEmitter = require('events').EventEmitter;
     theosp = require("./theosp");
 
