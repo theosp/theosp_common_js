@@ -140,7 +140,13 @@ if ((typeof $ === "undefined" || typeof $.extend === "undefined") && typeof requ
                     // We look on routes without route.regex as defaults
                     context.route_params = {};
 
+                    if (typeof self.options.pre_filter === "function") {
+                        self.options.pre_filter.call(context);
+                    }
                     route.action.call(context, string);
+                    if (typeof self.options.post_filter === "function") {
+                        self.options.post_filter.call(context);
+                    }
 
                     return;
                 }
