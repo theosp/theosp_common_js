@@ -112,9 +112,16 @@
                 }
 
                 return newArray;
-            }
+            },
             // }}}
 
+            // extend {{{
+            extend: function (array_to_extend, array) {
+                array_to_extend.push.apply(array_to_extend, array);
+
+                return array_to_extend;
+            }
+            // }}}
         },
         // }}}
 
