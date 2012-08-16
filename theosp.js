@@ -120,6 +120,33 @@
                 array_to_extend.push.apply(array_to_extend, array);
 
                 return array_to_extend;
+            },
+            // }}}
+
+            // complement {{{
+            complement: function (a, b) {
+                for (var index = a.length - 1; index >= 0; --index) {
+                    if (theosp.array.indexOf(a[index], b) >= 0) {
+                        a.splice(index, 1);
+                    }
+                }
+            },
+            // }}}
+
+            // unique {{{
+            unique: function (array) {
+                var u = {}, a = [];
+
+                for(var i = 0, l = array.length; i < l; ++i){
+                    if(u.hasOwnProperty(array[i])) {
+                        continue;
+                    }
+
+                    a.push(array[i]);
+                    u[array[i]] = 1;
+                }
+
+                return a;
             }
             // }}}
         },
@@ -514,7 +541,7 @@
         this.theosp = theosp;
     }
     // }}}
-
 })();
+
 
 // vim:fdm=marker:fmr={{{,}}}:
