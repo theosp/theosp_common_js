@@ -272,6 +272,14 @@
             },
             // }}}
 
+            // isEmail {{{
+            isEmail: function (email) {
+                var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+                return re.test(email);
+            },
+            // }}}
+            
             // parseDjangoJsonDate {{{
             parseDjangoJsonDate: function (date_string) {
                 if (typeof date_string !== "string") {
@@ -455,12 +463,14 @@
         },
         // }}}
 
+        // integer {{{
         integer: {
             getRandom: function (min, max) {
                 // http://stackoverflow.com/questions/1527803/generating-random-numbers-in-javascript-in-a-specific-range
                 return Math.floor(Math.random() * (max - min + 1)) + min;
             }
         },
+        // }}}
 
         // functions {{{
         functions: {
@@ -528,9 +538,45 @@
             }
             // }}}
 
-        }
+        },
         // }}}
 
+        // misc {{{
+        getLogger: function(log_level, coloring_system) {
+            var levels = {debug: 1, info: 2, warning: 3, error: 4, fatal: 5, none: 6},
+                getLevelInt = function (level) {
+                    return level in levels ? levels[level] : (level.toLowerCase() in levels ? levels[level.toLowerCase()] : 100);
+                },
+                log_level = getLevelInt(log_level);
+
+            var terminal_colors = {
+                    red: '\u001b[31m',
+                    blue: '\u001b[34m',
+                    reset: '\u001b[0m'
+                };
+
+            var util = require('util');
+            return function (level, message) {
+                var date = new Date();
+                level_int = getLevelInt(level);
+                if (level_int >= log_level) {
+                    var message = util.format.apply(this, Array.prototype.slice.call(arguments, 1));
+                    if (coloring_system === "terminal") {
+                        var color;
+                        if (level_int >= 3) {
+                            color = terminal_colors.red;
+                        } else {
+                            color = terminal_colors.blue;
+                        }
+
+                        console.log(color + level.toUpperCase() + terminal_colors.reset + ' :: ' + date.toISOString() + ' :: ' + message);
+                    } else {
+                        console.log(level.toUpperCase() + ' :: ' + date.toISOString() + ' :: ' + message);
+                    }
+                }
+            }
+        }
+        // }}}
     };
     // }}}
 
